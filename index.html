@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cat To-Do List</title>
+  <!-- Import Google Fonts hỗ trợ tiếng Việt mượt mà -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
@@ -30,7 +35,7 @@
     }
 
     body {
-      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
+      font-family: 'Comfortaa', 'Nunito', sans-serif;
       background-color: var(--color-bg);
       color: var(--color-charcoal);
       min-height: 100vh;
@@ -153,7 +158,8 @@
       text-align: center;
       padding: 12px 0 10px 0;
       font-size: 2rem;
-      font-weight: 900;
+      font-weight: 700;
+      font-family: 'Nunito', sans-serif;
       letter-spacing: 4px;
       box-shadow: 0 3px 6px rgba(0,0,0,0.05);
     }
@@ -179,8 +185,8 @@
     }
 
     .current-date-text {
-      font-weight: bold;
-      font-size: 1.05rem;
+      font-weight: 700;
+      font-size: 0.95rem;
     }
 
     .calendar-toggle-btn {
@@ -190,7 +196,7 @@
       padding: 6px 14px;
       cursor: pointer;
       font-family: inherit;
-      font-weight: bold;
+      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -215,7 +221,7 @@
       border: 2px solid var(--color-charcoal);
       border-radius: 12px;
       background-color: #fff;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-family: inherit;
       outline: none;
     }
@@ -226,8 +232,8 @@
       border: 2px solid var(--color-charcoal);
       border-radius: 12px;
       padding: 0 20px;
-      font-size: 1.2rem;
-      font-weight: bold;
+      font-size: 1rem;
+      font-weight: 700;
       cursor: pointer;
       transition: background 0.2s;
     }
@@ -257,13 +263,13 @@
       width: 32px;
       height: 32px;
       border: 2.5px solid var(--color-charcoal);
-      border-radius: 6px;
+      border-radius: 8px;
       background-color: #fff;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.4rem;
+      font-size: 1.2rem;
       font-weight: bold;
       flex-shrink: 0;
       user-select: none;
@@ -290,7 +296,7 @@
       flex: 1;
       border: none;
       background: transparent;
-      font-size: 1.15rem;
+      font-size: 1rem;
       font-family: inherit;
       color: var(--color-charcoal);
       outline: none;
@@ -340,8 +346,8 @@
       border: 2px solid var(--color-charcoal);
       border-radius: 20px;
       padding: 14px;
-      font-size: 1.15rem;
-      font-weight: bold;
+      font-size: 1.05rem;
+      font-weight: 700;
       font-family: inherit;
       cursor: pointer;
       text-align: center;
@@ -418,7 +424,7 @@
     }
 
     .cal-day-label {
-      font-weight: bold;
+      font-weight: 700;
       font-size: 0.85rem;
       padding: 4px 0;
     }
@@ -428,7 +434,7 @@
       border: 1px solid rgba(0,0,0,0.1);
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       background: #fff;
       position: relative;
     }
@@ -439,7 +445,7 @@
 
     .cal-date-cell.holiday {
       background-color: var(--color-yellow) !important;
-      font-weight: bold;
+      font-weight: 700;
     }
 
     .cal-date-cell.selected {
@@ -482,24 +488,25 @@
     }
 
     .summary-title {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
+      font-weight: 700;
       color: var(--color-coral);
       margin-bottom: 10px;
     }
 
     .summary-score {
       font-size: 2.5rem;
-      font-weight: bold;
+      font-weight: 700;
       margin: 15px 0;
       color: var(--color-teal);
     }
 
     .summary-message {
-      font-size: 1rem;
-      line-height: 1.5;
+      font-size: 0.95rem;
+      line-height: 1.6;
       margin-bottom: 20px;
       background: var(--color-cream);
-      padding: 12px;
+      padding: 14px;
       border-radius: 12px;
       border: 1.5px dashed var(--color-tan);
     }
@@ -509,7 +516,7 @@
       border: 2px solid var(--color-charcoal);
       border-radius: 12px;
       padding: 10px 25px;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
       font-family: inherit;
     }
@@ -576,7 +583,7 @@
     <div class="calendar-card">
       <div class="calendar-header">
         <button class="calendar-nav-btn" onclick="changeMonth(-1)">&lt;</button>
-        <div id="calendarMonthTitle" style="font-weight: bold; font-size: 1.1rem;">Tháng 10 / 2026</div>
+        <div id="calendarMonthTitle" style="font-weight: 700; font-size: 1.1rem;">Tháng 10 / 2026</div>
         <button class="calendar-nav-btn" onclick="changeMonth(1)">&gt;</button>
       </div>
       <div class="calendar-grid" id="calendarGrid"></div>
