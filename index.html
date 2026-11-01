@@ -38,7 +38,6 @@
       flex-direction: column;
     }
 
-    /* Outer Wrapper - Margins on Desktop */
     .app-container {
       width: 100%;
       max-width: 650px;
@@ -50,12 +49,12 @@
       background-color: var(--color-bg);
     }
 
-    /* Cat Header Section */
+    /* Header Cat Section */
     .header-cat-container {
       position: relative;
       width: 100%;
       padding-top: 15px;
-      margin-bottom: -5px;
+      margin-bottom: 0px;
       z-index: 2;
     }
 
@@ -159,20 +158,91 @@
       box-shadow: 0 3px 6px rgba(0,0,0,0.05);
     }
 
-    /* Main Area */
+    /* Main Area Layout */
     .main-content {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 15px 20px 30px 20px;
+      padding: 15px 20px 25px 20px;
+      gap: 15px;
     }
 
-    /* List Container */
+    /* Top Controls Row */
+    .date-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--color-peach);
+      border: 2px solid var(--color-charcoal);
+      border-radius: 15px;
+      padding: 10px 18px;
+    }
+
+    .current-date-text {
+      font-weight: bold;
+      font-size: 1.05rem;
+    }
+
+    .calendar-toggle-btn {
+      background-color: var(--color-yellow);
+      border: 2px solid var(--color-charcoal);
+      border-radius: 10px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 2px 2px 0 var(--color-charcoal);
+      transition: transform 0.1s;
+    }
+
+    .calendar-toggle-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0 0 0 var(--color-charcoal);
+    }
+
+    /* Add Task Row */
+    .add-task-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .add-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid var(--color-charcoal);
+      border-radius: 12px;
+      background-color: #fff;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+    }
+
+    .add-btn {
+      background-color: var(--color-teal);
+      color: #fff;
+      border: 2px solid var(--color-charcoal);
+      border-radius: 12px;
+      padding: 0 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .add-btn:hover {
+      background-color: #63b3a4;
+    }
+
+    /* List Container (Middle) */
     .todo-list {
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-top: 5px;
     }
 
     .todo-item {
@@ -256,84 +326,14 @@
       color: var(--color-red-cross);
     }
 
-    /* Control Inputs below list */
-    .controls-section {
+    /* Bottom Action Controls */
+    .bottom-section {
       margin-top: auto;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      padding-top: 15px;
+      gap: 12px;
     }
 
-    .add-task-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .add-input {
-      flex: 1;
-      padding: 12px 16px;
-      border: 2px solid var(--color-charcoal);
-      border-radius: 12px;
-      background-color: #fff;
-      font-size: 1rem;
-      font-family: inherit;
-      outline: none;
-    }
-
-    .add-btn {
-      background-color: var(--color-teal);
-      color: #fff;
-      border: 2px solid var(--color-charcoal);
-      border-radius: 12px;
-      padding: 0 20px;
-      font-size: 1.4rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .add-btn:hover {
-      background-color: #63b3a4;
-    }
-
-    /* Date Bar & Calendar Button */
-    .date-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: var(--color-peach);
-      border: 2px solid var(--color-charcoal);
-      border-radius: 15px;
-      padding: 10px 18px;
-    }
-
-    .current-date-text {
-      font-weight: bold;
-      font-size: 1.05rem;
-    }
-
-    .calendar-toggle-btn {
-      background-color: var(--color-yellow);
-      border: 2px solid var(--color-charcoal);
-      border-radius: 10px;
-      padding: 6px 12px;
-      cursor: pointer;
-      font-family: inherit;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 2px 2px 0 var(--color-charcoal);
-      transition: transform 0.1s;
-    }
-
-    .calendar-toggle-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0 0 0 var(--color-charcoal);
-    }
-
-    /* Submit Complete Day Button */
     .finish-day-btn {
       background-color: var(--color-coral);
       color: #fff;
@@ -354,7 +354,24 @@
       box-shadow: 0 0 0 var(--color-charcoal);
     }
 
-    /* Calendar Modal / Drawer */
+    .decorative-footer-bar {
+      height: 16px;
+      background-color: var(--color-mint);
+      border: 2px solid var(--color-charcoal);
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 0 20px;
+    }
+    .footer-icon {
+      width: 8px;
+      height: 8px;
+      background: var(--color-coral);
+      border-radius: 50%;
+    }
+
+    /* Calendar Modal */
     .calendar-modal {
       display: none;
       position: fixed;
@@ -441,7 +458,7 @@
       border-radius: 50%;
     }
 
-    /* Summary Result Modal */
+    /* Summary Modal */
     .summary-modal {
       display: none;
       position: fixed;
@@ -496,24 +513,6 @@
       cursor: pointer;
       font-family: inherit;
     }
-
-    .decorative-footer-bar {
-      height: 16px;
-      background-color: var(--color-mint);
-      border-top: 2px solid var(--color-charcoal);
-      margin-top: 10px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 0 20px;
-    }
-    .footer-icon {
-      width: 8px;
-      height: 8px;
-      background: var(--color-coral);
-      border-radius: 50%;
-    }
   </style>
 </head>
 <body>
@@ -537,41 +536,36 @@
       <div class="todo-banner">TO DO</div>
     </div>
 
-    <!-- Main List View -->
+    <!-- Main View Area -->
     <div class="main-content">
       
-      <!-- Todo Items Container -->
-      <div class="todo-list" id="todoList">
-        <!-- Dynamically Rendered -->
+      <!-- 1. Date & Calendar Row (Top) -->
+      <div class="date-bar">
+        <div class="current-date-text" id="currentDateDisplay">--/--/----</div>
+        <button class="calendar-toggle-btn" onclick="openCalendar()">
+          📅 Lịch Tháng
+        </button>
       </div>
 
-      <!-- Controls Section Moved Below List -->
-      <div class="controls-section">
-        
-        <!-- Input Row -->
-        <div class="add-task-row">
-          <input type="text" id="newTaskInput" class="add-input" placeholder="Thêm việc mới vào đây..." onkeydown="if(event.key==='Enter') addTask()">
-          <button class="add-btn" onclick="addTask()">+</button>
-        </div>
+      <!-- 2. Add New Task Row (Top) -->
+      <div class="add-task-row">
+        <input type="text" id="newTaskInput" class="add-input" placeholder="Thêm công việc mới..." onkeydown="if(event.key==='Enter') addTask()">
+        <button class="add-btn" onclick="addTask()">+ Thêm</button>
+      </div>
 
-        <!-- Date Bar & Calendar Trigger -->
-        <div class="date-bar">
-          <div class="current-date-text" id="currentDateDisplay">--/--/----</div>
-          <button class="calendar-toggle-btn" onclick="openCalendar()">
-            📅 Lịch tháng
-          </button>
-        </div>
+      <!-- 3. Todo List Items (Middle) -->
+      <div class="todo-list" id="todoList">
+        <!-- Rendered Dynamically -->
+      </div>
 
-        <!-- Submit Day Button -->
+      <!-- 4. Submit & Footer Bar (Bottom) -->
+      <div class="bottom-section">
         <button class="finish-day-btn" onclick="completeDay()">Hoàn thành 1 ngày ✨</button>
-
-        <!-- Cute Footer Decor -->
         <div class="decorative-footer-bar">
           <div class="footer-icon"></div>
           <div class="footer-icon" style="background: var(--color-yellow);"></div>
           <div class="footer-icon" style="background: var(--color-sage);"></div>
         </div>
-
       </div>
 
     </div>
@@ -585,9 +579,7 @@
         <div id="calendarMonthTitle" style="font-weight: bold; font-size: 1.1rem;">Tháng 10 / 2026</div>
         <button class="calendar-nav-btn" onclick="changeMonth(1)">&gt;</button>
       </div>
-      <div class="calendar-grid" id="calendarGrid">
-        <!-- Grid Items -->
-      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
       <div style="text-align: center; margin-top: 15px;">
         <button class="close-modal-btn" onclick="closeCalendar()">Đóng</button>
       </div>
@@ -605,25 +597,14 @@
   </div>
 
   <script>
-    // State Management
     let selectedDate = new Date();
     let currentCalMonth = selectedDate.getMonth();
     let currentCalYear = selectedDate.getFullYear();
 
-    // Data format: { "YYYY-MM-DD": [ { id, text, state: 0 (none), 1 (green V), 2 (red X) } ] }
     let tasksData = JSON.parse(localStorage.getItem('cat_todo_tasks')) || {};
 
-    // List of major holidays (DD-MM) to highlight yellow
     const holidays = [
-      '01-01', // Tết Dương Lịch
-      '08-03', // Quốc tế Phụ nữ
-      '30-04', // Giải phóng Miền Nam
-      '01-05', // Quốc tế Lao động
-      '02-09', // Quốc khánh
-      '20-10', // Phụ nữ Việt Nam
-      '20-11', // Nhà giáo Việt Nam
-      '24-12', // Giáng sinh
-      '25-12'
+      '01-01', '08-03', '30-04', '01-05', '02-09', '20-10', '20-11', '24-12', '25-12'
     ];
 
     function getFormattedDateKey(date) {
@@ -651,7 +632,6 @@
       const tasks = tasksData[key] || [];
 
       if (tasks.length === 0) {
-        // Default empty state placeholders
         for (let i = 0; i < 3; i++) {
           createDefaultEmptyItem(listContainer);
         }
@@ -662,7 +642,6 @@
         const itemEl = document.createElement('div');
         itemEl.className = 'todo-item';
 
-        // Checkbox button state: 0 -> None, 1 -> Green Check, 2 -> Red Cross
         const btn = document.createElement('button');
         btn.className = 'checkbox-btn';
         if (task.state === 1) {
@@ -677,7 +656,6 @@
 
         btn.onclick = () => cycleTaskState(index);
 
-        // Input Text
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'todo-input-text';
@@ -686,7 +664,6 @@
         input.value = task.text;
         input.onchange = (e) => updateTaskText(index, e.target.value);
 
-        // Delete button
         const delBtn = document.createElement('button');
         delBtn.className = 'delete-item-btn';
         delBtn.innerText = '🗑';
@@ -725,7 +702,6 @@
       const key = getFormattedDateKey(selectedDate);
       if (!tasksData[key] || !tasksData[key][index]) return;
 
-      // Cycle logic: 0 -> 1 (Green V) -> 2 (Red X) -> 1 (Green V) -> 2 (Red X)
       let currentState = tasksData[key][index].state || 0;
       if (currentState === 0) {
         currentState = 1;
@@ -782,7 +758,6 @@
       renderTasks();
     }
 
-    // Complete Day Logic & Modals
     function completeDay() {
       const key = getFormattedDateKey(selectedDate);
       const tasks = tasksData[key] || [];
@@ -793,29 +768,19 @@
       }
 
       let greenCount = 0;
-      let totalAssessed = 0;
-
       tasks.forEach(task => {
-        if (task.state === 1) {
-          greenCount++;
-          totalAssessed++;
-        } else if (task.state === 2) {
-          totalAssessed++;
-        }
+        if (task.state === 1) greenCount++;
       });
 
-      // Calculate percentage based on total evaluated tasks (or total tasks)
       const totalTasks = tasks.length;
       const percentage = totalTasks > 0 ? Math.round((greenCount / totalTasks) * 100) : 0;
 
-      // Trigger Confetti
       confetti({
         particleCount: 100,
         spread: 70,
         origin: { y: 0.6 }
       });
 
-      // Show Summary Modal
       const scoreEl = document.getElementById('summaryScore');
       const msgEl = document.getElementById('summaryMessage');
 
@@ -836,7 +801,6 @@
       document.getElementById('summaryModal').style.display = 'none';
     }
 
-    // Calendar Handlers
     function openCalendar() {
       currentCalMonth = selectedDate.getMonth();
       currentCalYear = selectedDate.getFullYear();
@@ -867,7 +831,6 @@
       const grid = document.getElementById('calendarGrid');
       grid.innerHTML = '';
 
-      // Day headers
       const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
       days.forEach(d => {
         const dEl = document.createElement('div');
@@ -879,13 +842,11 @@
       const firstDayIndex = new Date(currentCalYear, currentCalMonth, 1).getDay();
       const totalDays = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
 
-      // Empty padding cells
       for (let i = 0; i < firstDayIndex; i++) {
         const empty = document.createElement('div');
         grid.appendChild(empty);
       }
 
-      // Date cells
       for (let day = 1; day <= totalDays; day++) {
         const cell = document.createElement('div');
         cell.className = 'cal-date-cell';
@@ -895,7 +856,6 @@
         const monthFormatted = String(currentCalMonth + 1).padStart(2, '0');
         const holidayKey = `${dayFormatted}-${monthFormatted}`;
 
-        // Highlight Holidays
         if (holidays.includes(holidayKey)) {
           cell.classList.add('holiday');
           const dot = document.createElement('div');
@@ -903,7 +863,6 @@
           cell.appendChild(dot);
         }
 
-        // Check if selected
         if (
           day === selectedDate.getDate() &&
           currentCalMonth === selectedDate.getMonth() &&
@@ -922,7 +881,6 @@
       }
     }
 
-    // Initialize on load
     window.onload = init;
   </script>
 </body>
