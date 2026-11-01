@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sổ Tay To-Do Mèo Đen Cute</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Font (Comfortaa for cute hand-drawn feel) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        palette: {
+                            yellow: '#F9D889',
+                            pink: '#F7A7A6',
+                            teal: '#7AC1BA',
+                            sage: '#A8DBA8',
+                            cream: '#FFF9E6',
+                            lavender: '#C5CAF4',
+                            peach: '#FBD4C0',
+                            tan: '#C69472',
+                            coral: '#FF8866',
+                            paperBg: '#F7F3E9',
+                            darkCat: '#2A292B',
+                        }
+                    },
+                    fontFamily: {
+                        cute: ['Comfortaa', 'cursive'],
+                        hand: ['"Patrick Hand"', 'cursive']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F5EC; /* Full screen light cream background */
+            font-family: 'Comfortaa', cursive;
+        }
+
+        /* Hand-drawn style lines for tasks */
+        .ruled-line {
+            border-bottom: 2px dashed #4A4A4A;
+        }
+
+        /* Checkbox custom toggle styles */
+        .cute-checkbox {
+            width: 28px;
+            height: 28px;
+            border: 2.5px solid #333;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #FFF;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .cute-checkbox:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal backdrop blurring */
+        .modal-backdrop {
+            background-color: rgba(40, 35, 45, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Custom scrollbar for task list */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C69472;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-between p-3 sm:p-6 text-slate-800">
+
+    <!-- MAIN CONTAINER - FULL WIDTH KEM BACKGROUND -->
+    <main class="w-full max-w-xl flex-1 flex flex-col pt-10 pb-4 px-2 sm:px-4 relative">
+        
+        <!-- PEEKING BLACK CAT (Positioned at top margin) -->
+        <div class="relative w-full flex justify-start pl-4 -mb-1 pointer-events-none select-none z-10">
+            <svg class="w-36 h-14" viewBox="0 0 160 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Cat Head -->
+                <path d="M 25 65 Q 20 25 45 25 Q 70 15 95 25 Q 120 25 115 65 Z" fill="#2A292B"/>
+                <!-- Ears Left -->
+                <polygon points="32,32 15,5 45,22" fill="#2A292B"/>
+                <polygon points="30,30 18,10 42,22" fill="#F7A7A6"/>
+                <!-- Ears Right -->
+                <polygon points="108,32 125,5 95,22" fill="#2A292B"/>
+                <polygon points="106,30 122,10 98,22" fill="#F7A7A6"/>
+                <!-- Eyes -->
+                <ellipse cx="50" cy="42" rx="7" ry="3" fill="#FFF"/>
+                <circle cx="50" cy="42" r="2" fill="#2A292B"/>
+                <ellipse cx="90" cy="42" rx="7" ry="3" fill="#FFF"/>
+                <circle cx="90" cy="42" r="2" fill="#2A292B"/>
+                <!-- Nose & Mouth -->
+                <polygon points="70,47 66,44 74,44" fill="#F7A7A6"/>
+                <path d="M 66 50 Q 70 53 74 50" stroke="#FFF" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Whiskers -->
+                <line x1="20" y1="42" x2="5" y2="38" stroke="#FFF" stroke-width="1.5"/>
+                <line x1="20" y1="46" x2="3" y2="48" stroke="#FFF" stroke-width="1.5"/>
+                <line x1="120" y1="42" x2="135" y2="38" stroke="#FFF" stroke-width="1.5"/>
+                <line x1="120" y1="46" x2="137" y2="48" stroke="#FFF" stroke-width="1.5"/>
+                <!-- Cute Paws Over Header Bar -->
+                <ellipse cx="38" cy="67" rx="10" ry="8" fill="#2A292B" stroke="#111" stroke-width="1"/>
+                <ellipse cx="102" cy="67" rx="10" ry="8" fill="#2A292B" stroke="#111" stroke-width="1"/>
+            </svg>
+            <!-- Title Header -->
+            <div class="absolute right-6 bottom-1 text-3xl font-black font-hand tracking-wider text-slate-800 select-none">
+                TO DO
+            </div>
+        </div>
+
+        <!-- SALMON PINK HEADER STRIP -->
+        <div class="bg-palette-pink border-2 border-slate-800 rounded-lg py-2.5 px-4 mb-3 shadow-sm flex items-center justify-between">
+            <span class="font-bold text-slate-800 text-lg tracking-wide">Danh Sách Việc Cần Làm</span>
+            <span id="task-counter-badge" class="text-xs bg-white/90 text-slate-800 font-bold px-2.5 py-1 rounded-full border border-slate-800">0/0</span>
+        </div>
+
+        <!-- TASK INPUT FIELD -->
+        <form id="add-task-form" class="mb-3 flex gap-2">
+            <input 
+                type="text" 
+                id="task-input" 
+                placeholder="Thêm công việc mới..." 
+                class="flex-1 px-3.5 py-2.5 rounded-xl border-2 border-slate-700 bg-white font-cute text-sm focus:outline-none focus:ring-2 focus:ring-palette-teal shadow-sm"
+                maxlength="60"
+                required
+            >
+            <button 
+                type="submit" 
+                class="bg-palette-teal hover:bg-teal-400 text-slate-900 font-bold px-4 py-2.5 rounded-xl border-2 border-slate-700 shadow-sm transition active:scale-95 text-sm flex items-center gap-1"
+            >
+                <span>+</span> Thêm
+            </button>
+        </form>
+
+        <!-- MOVED DOWN: DATE & CALENDAR CONTROL ROW (Directly below input field) -->
+        <div class="flex justify-between items-center mb-4 px-1 py-1 bg-palette-cream border border-slate-300 rounded-xl">
+            <div class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border border-slate-700 shadow-xs">
+                <span class="text-xs font-bold text-slate-500">Hôm nay:</span>
+                <span class="text-xs sm:text-sm font-bold text-slate-800" id="current-date-display">--/--/----</span>
+            </div>
+
+            <button id="btn-open-calendar" class="bg-palette-yellow hover:bg-amber-300 text-slate-800 font-bold px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5 text-xs sm:text-sm border-2 border-slate-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span>Lịch Tháng</span>
+            </button>
+        </div>
+
+        <!-- TASKS CONTAINER - EXTENDED VERTICAL SPACE -->
+        <div id="tasks-list" class="space-y-3.5 flex-1 min-h-[350px] overflow-y-auto pr-1 mb-4">
+            <!-- Dynamic task items inserted here -->
+        </div>
+
+        <!-- BOTTOM DECORATIVE / ACTION FOOTER -->
+        <div class="pt-3 border-t-2 border-slate-300">
+            <!-- Decorative Hearts & Stars Box -->
+            <div class="bg-palette-teal/20 border-2 border-palette-teal rounded-full py-1.5 px-4 flex justify-around items-center mb-3 text-lg select-none opacity-90">
+                <span class="text-palette-coral">♥</span>
+                <span class="text-palette-yellow">♥</span>
+                <span class="text-palette-sage text-sm">🌱</span>
+                <span class="text-palette-coral font-bold text-xl">★</span>
+                <span class="text-palette-teal">♥</span>
+                <span class="text-slate-600 font-bold">★</span>
+            </div>
+
+            <!-- COMPLETE DAY BUTTON -->
+            <button 
+                id="btn-complete-day" 
+                class="w-full bg-palette-coral hover:bg-orange-400 text-white font-bold py-3 px-4 rounded-xl border-2 border-slate-800 shadow-md transform hover:-translate-y-0.5 transition active:translate-y-0 text-base flex items-center justify-center gap-2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Hoàn Thành 1 Ngày</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- MONTHLY CALENDAR MODAL -->
+    <div id="calendar-modal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-palette-cream border-4 border-slate-800 rounded-2xl w-full max-w-sm p-5 shadow-2xl relative animate-in fade-in zoom-in duration-200">
+            <!-- Close Button -->
+            <button id="btn-close-calendar" class="absolute top-3 right-3 text-slate-700 hover:text-black text-xl font-bold bg-white border-2 border-slate-700 rounded-full w-8 h-8 flex items-center justify-center">
+                ✕
+            </button>
+
+            <!-- Calendar Header Controls -->
+            <div class="flex justify-between items-center mb-4 pr-8">
+                <h2 id="calendar-month-year" class="font-bold text-slate-800 text-lg capitalize">Tháng 12, 2026</h2>
+                <div class="flex gap-1">
+                    <button id="prev-month" class="bg-white border-2 border-slate-700 px-2.5 py-1 rounded-lg font-bold text-sm hover:bg-slate-100">◄</button>
+                    <button id="next-month" class="bg-white border-2 border-slate-700 px-2.5 py-1 rounded-lg font-bold text-sm hover:bg-slate-100">►</button>
+                </div>
+            </div>
+
+            <!-- Weekday Titles -->
+            <div class="grid grid-cols-7 gap-1 text-center font-bold text-xs text-slate-600 mb-2">
+                <div>CN</div><div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div>
+            </div>
+
+            <!-- Days Grid -->
+            <div id="calendar-days-grid" class="grid grid-cols-7 gap-1.5 text-center text-sm">
+                <!-- Days populated dynamically -->
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-300 flex justify-between items-center text-xs text-slate-600">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 bg-palette-yellow border border-slate-800 rounded inline-block"></span>
+                    <span>Ngày Lễ</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-3.5 h-3.5 bg-palette-teal border border-slate-800 rounded inline-block"></span>
+                    <span>Đang Chọn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DAY SUMMARY RESULT MODAL -->
+    <div id="summary-modal" class="fixed inset-0 modal-backdrop hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-palette-cream border-4 border-slate-800 rounded-2xl w-full max-w-md p-6 shadow-2xl text-center relative animate-in fade-in zoom-in duration-200">
+            <!-- Modal Header Icon -->
+            <div class="w-20 h-20 mx-auto -mt-12 bg-palette-yellow border-4 border-slate-800 rounded-full flex items-center justify-center text-4xl shadow-md" id="summary-icon">
+                🎉
+            </div>
+
+            <h3 class="text-2xl font-black text-slate-800 mt-3 mb-1">Tổng Kết Ngày</h3>
+            <p id="summary-date-sub" class="text-xs text-slate-500 font-bold mb-4">Ngày --/--/----</p>
+
+            <!-- Completion Percentage Donut / Progress Bar -->
+            <div class="bg-white border-2 border-slate-800 rounded-xl p-4 mb-5 shadow-inner">
+                <div class="text-4xl font-black text-palette-coral mb-1" id="summary-percentage">0%</div>
+                <div class="w-full bg-slate-200 rounded-full h-4 border border-slate-700 overflow-hidden mb-3">
+                    <div id="summary-progress-bar" class="bg-palette-teal h-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                </div>
+                
+                <div class="flex justify-center gap-4 text-xs font-bold text-slate-700">
+                    <span class="text-emerald-600" id="summary-green-count">✔ Đã xong: 0</span>
+                    <span class="text-rose-500" id="summary-red-count">❌ Chưa xong: 0</span>
+                    <span class="text-slate-500" id="summary-empty-count">⬜ Trống: 0</span>
+                </div>
+            </div>
+
+            <!-- Motivational Message Box -->
+            <div id="summary-message-box" class="bg-palette-peach/50 border-2 border-slate-700 rounded-xl p-4 text-sm font-semibold text-slate-800 leading-relaxed mb-6">
+                <!-- Message injected here dynamically -->
+            </div>
+
+            <button id="btn-close-summary" class="w-full bg-palette-teal hover:bg-teal-400 text-slate-900 font-bold py-2.5 px-4 rounded-xl border-2 border-slate-800 shadow transition">
+                Tiếp Tục Cố Gắng!
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- HOLIDAYS DEFINITION (Vietnam Fixed & Common Holidays) ---
+        const HOLIDAYS = {
+            "1-1": "Tết Dương Lịch",
+            "14-2": "Lễ Tình Yêu",
+            "8-3": "Quốc Tế Phụ Nữ",
+            "30-4": "Giải Phóng Miền Nam",
+            "1-5": "Quốc Tế Lao Động",
+            "2-9": "Quốc Khánh",
+            "20-10": "Phụ Nữ Việt Nam",
+            "20-11": "Nhà Giáo Việt Nam",
+            "24-12": "Giáng Sinh",
+            "25-12": "Giáng Sinh"
+        };
+
+        // --- APP STATE ---
+        let selectedDate = new Date(); // Tracks selected date
+        let currentCalendarDate = new Date(); // Tracks calendar view month/year
+        
+        // Task Storage structure: { "YYYY-MM-DD": [ { id, text, state: 0|1|2 }, ... ] }
+        // state: 0 = Empty, 1 = Green Checkmark (✔), 2 = Red Cross (❌)
+        let allTasks = JSON.parse(localStorage.getItem('cat_todo_tasks_data')) || {};
+
+        // --- HELPER FUNCTIONS ---
+        function formatDateKey(dateObj) {
+            const yyyy = dateObj.getFullYear();
+            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function formatDisplayDate(dateObj) {
+            const dd = String(dateObj.getDate()).padStart(2, '0');
+            const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const yyyy = dateObj.getFullYear();
+            return `${dd}/${mm}/${yyyy}`;
+        }
+
+        function saveTasksToStorage() {
+            localStorage.setItem('cat_todo_tasks_data', JSON.stringify(allTasks));
+        }
+
+        function getTasksForSelectedDate() {
+            const key = formatDateKey(selectedDate);
+            if (!allTasks[key]) {
+                // Default sample tasks for brand new empty dates
+                allTasks[key] = [
+                    { id: Date.now() + 1, text: "Tập thể dục buổi sáng 30p", state: 1 },
+                    { id: Date.now() + 2, text: "Uống đủ 2 lít nước", state: 0 },
+                    { id: Date.now() + 3, text: "Đọc 10 trang sách", state: 2 }
+                ];
+                saveTasksToStorage();
+            }
+            return allTasks[key];
+        }
+
+        // --- RENDER TASKS LIST ---
+        function renderTasks() {
+            const tasksListEl = document.getElementById('tasks-list');
+            const dateKey = formatDateKey(selectedDate);
+            document.getElementById('current-date-display').innerText = formatDisplayDate(selectedDate);
+
+            const tasks = getTasksForSelectedDate();
+            tasksListEl.innerHTML = '';
+
+            let completedCount = 0;
+            tasks.forEach((task) => {
+                if (task.state === 1) completedCount++;
+
+                const itemEl = document.createElement('div');
+                itemEl.className = "flex items-center justify-between gap-2 ruled-line pb-2 pt-1 group";
+
+                // Checkbox state mapping: 
+                // 0 = Unchecked 
+                // 1 = Green Checkmark (✔)
+                // 2 = Red Cross (❌)
+                let checkContent = '';
+                let checkBgClass = 'bg-white border-slate-700';
+
+                if (task.state === 1) {
+                    checkContent = '<span class="text-emerald-600 font-black text-lg select-none">✓</span>';
+                    checkBgClass = 'bg-emerald-100 border-emerald-600';
+                } else if (task.state === 2) {
+                    checkContent = '<span class="text-rose-500 font-black text-base select-none">✕</span>';
+                    checkBgClass = 'bg-rose-100 border-rose-500';
+                }
+
+                itemEl.innerHTML = `
+                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                        <div class="cute-checkbox ${checkBgClass}" data-id="${task.id}">
+                            ${checkContent}
+                        </div>
+                        <span class="font-hand text-lg text-slate-800 break-words flex-1 ${task.state === 1 ? 'line-through opacity-60' : ''}">
+                            ${escapeHtml(task.text)}
+                        </span>
+                    </div>
+                    <button class="delete-task-btn opacity-60 group-hover:opacity-100 text-slate-400 hover:text-rose-500 px-1 font-bold text-sm transition" data-id="${task.id}" title="Xóa">
+                        ✕
+                    </button>
+                `;
+
+                tasksListEl.appendChild(itemEl);
+            });
+
+            // Update header task count badge
+            document.getElementById('task-counter-badge').innerText = `${completedCount}/${tasks.length}`;
+
+            // Attach Checkbox Click Listeners (Cyclic Toggle: 0 -> 1 -> 2 -> 1 -> 2)
+            document.querySelectorAll('.cute-checkbox').forEach(box => {
+                box.addEventListener('click', (e) => {
+                    const taskId = Number(box.getAttribute('data-id'));
+                    toggleTaskState(taskId);
+                });
+            });
+
+            // Attach Delete Listeners
+            document.querySelectorAll('.delete-task-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const taskId = Number(btn.getAttribute('data-id'));
+                    deleteTask(taskId);
+                });
+            });
+        }
+
+        // --- TASK ACTIONS ---
+        function toggleTaskState(taskId) {
+            const key = formatDateKey(selectedDate);
+            const tasks = allTasks[key] || [];
+            const task = tasks.find(t => t.id === taskId);
+            if (task) {
+                // Clicking logic:
+                // Unchecked (0) -> 1st Click = Green Check (1)
+                // 2nd Click = Red Cross (2)
+                // 3rd Click = Green Check (1)
+                // 4th Click = Red Cross (2)...
+                if (task.state === 0) {
+                    task.state = 1;
+                } else if (task.state === 1) {
+                    task.state = 2;
+                } else {
+                    task.state = 1;
+                }
+                saveTasksToStorage();
+                renderTasks();
+            }
+        }
+
+        function addTask(text) {
+            const key = formatDateKey(selectedDate);
+            if (!allTasks[key]) allTasks[key] = [];
+            allTasks[key].push({
+                id: Date.now(),
+                text: text.trim(),
+                state: 0
+            });
+            saveTasksToStorage();
+            renderTasks();
+        }
+
+        function deleteTask(taskId) {
+            const key = formatDateKey(selectedDate);
+            if (allTasks[key]) {
+                allTasks[key] = allTasks[key].filter(t => t.id !== taskId);
+                saveTasksToStorage();
+                renderTasks();
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[m];
+            });
+        }
+
+        // --- CALENDAR LOGIC ---
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-days-grid');
+            const monthYearText = document.getElementById('calendar-month-year');
+            grid.innerHTML = '';
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            monthYearText.innerText = `Tháng ${month + 1}, ${year}`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            // Blank spaces before first day of month
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "h-8";
+                grid.appendChild(emptyCell);
+            }
+
+            const selectedDateStr = formatDateKey(selectedDate);
+            const todayStr = formatDateKey(new Date());
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dayCell = document.createElement('button');
+                const dateKey = `${day}-${month + 1}`;
+                const fullDate = new Date(year, month, day);
+                const fullDateStr = formatDateKey(fullDate);
+
+                let isHoliday = HOLIDAYS[dateKey] !== undefined;
+                let isSelected = fullDateStr === selectedDateStr;
+                let isToday = fullDateStr === todayStr;
+
+                let cellClasses = "h-8 w-8 mx-auto flex flex-col items-center justify-center rounded-lg text-xs font-bold transition border ";
+
+                if (isSelected) {
+                    cellClasses += "bg-palette-teal text-slate-900 border-slate-800 shadow-sm ";
+                } else if (isHoliday) {
+                    cellClasses += "bg-palette-yellow text-slate-900 border-amber-500 hover:bg-amber-300 ";
+                } else if (isToday) {
+                    cellClasses += "bg-palette-pink/40 text-slate-900 border-slate-600 ";
+                } else {
+                    cellClasses += "bg-white text-slate-700 border-slate-200 hover:bg-slate-100 ";
+                }
+
+                dayCell.className = cellClasses;
+                dayCell.innerHTML = `<span>${day}</span>`;
+                if (isHoliday) {
+                    dayCell.title = HOLIDAYS[dateKey];
+                }
+
+                dayCell.addEventListener('click', () => {
+                    selectedDate = fullDate;
+                    renderTasks();
+                    renderCalendar();
+                    document.getElementById('calendar-modal').classList.add('hidden');
+                });
+
+                grid.appendChild(dayCell);
+            }
+        }
+
+        // --- SUMMARY & CELEBRATION LOGIC ---
+        function calculateDaySummary() {
+            const tasks = getTasksForSelectedDate();
+            if (tasks.length === 0) {
+                return { green: 0, red: 0, empty: 0, total: 0, percentage: 0 };
+            }
+
+            let green = 0;
+            let red = 0;
+            let empty = 0;
+
+            tasks.forEach(t => {
+                if (t.state === 1) green++;
+                else if (t.state === 2) red++;
+                else empty++;
+            });
+
+            // Percentage calculated based on green checks vs total tasks
+            const percentage = Math.round((green / tasks.length) * 100);
+
+            return { green, red, empty, total: tasks.length, percentage };
+        }
+
+        function triggerCompleteDay() {
+            const summary = calculateDaySummary();
+
+            // Trigger Fireworks / Confetti Animation
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#F9D889', '#F7A7A6', '#7AC1BA', '#FF8866']
+            });
+
+            // Update Summary Modal Elements
+            document.getElementById('summary-date-sub').innerText = `Ngày ${formatDisplayDate(selectedDate)}`;
+            document.getElementById('summary-percentage').innerText = `${summary.percentage}%`;
+            document.getElementById('summary-progress-bar').style.width = `${summary.percentage}%`;
+
+            document.getElementById('summary-green-count').innerText = `✔ Đã xong: ${summary.green}`;
+            document.getElementById('summary-red-count').innerText = `❌ Chưa xong: ${summary.red}`;
+            document.getElementById('summary-empty-count').innerText = `⬜ Trống: ${summary.empty}`;
+
+            const msgBox = document.getElementById('summary-message-box');
+            const iconBox = document.getElementById('summary-icon');
+
+            // Motivating quote thresholds as requested by user
+            if (summary.percentage === 100) {
+                iconBox.innerText = '🏆';
+                msgBox.innerText = "Bạn đã hoàn thành tất cả các list cho ngày hôm nay, bạn là người có kỉ luật";
+                msgBox.className = "bg-emerald-100 border-2 border-emerald-500 rounded-xl p-4 text-sm font-semibold text-emerald-900 leading-relaxed mb-6";
+            } else if (summary.percentage >= 50) {
+                iconBox.innerText = '🌤️';
+                msgBox.innerText = "Bạn còn thiếu vài việc chưa hoàn thành, kỉ luật hơn trong ngày mai nhé, mọi cố gắng sẽ có kết quả cho sau này. Cố lên!";
+                msgBox.className = "bg-amber-100 border-2 border-amber-500 rounded-xl p-4 text-sm font-semibold text-amber-900 leading-relaxed mb-6";
+            } else {
+                iconBox.innerText = '💪';
+                msgBox.innerText = "Bạn còn nhiều việc chưa hoàn thành quá rồi! Hãy kiên trì hơn nhé, để không tiếc nuối cho sau này! Cố lên !!!";
+                msgBox.className = "bg-rose-100 border-2 border-rose-400 rounded-xl p-4 text-sm font-semibold text-rose-900 leading-relaxed mb-6";
+            }
+
+            // Show summary modal
+            document.getElementById('summary-modal').classList.remove('hidden');
+        }
+
+        // --- EVENT LISTENERS INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTasks();
+
+            // Task Add Form submit
+            document.getElementById('add-task-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const input = document.getElementById('task-input');
+                if (input.value.trim() !== '') {
+                    addTask(input.value);
+                    input.value = '';
+                }
+            });
+
+            // Calendar Modal Handlers
+            document.getElementById('btn-open-calendar').addEventListener('click', () => {
+                currentCalendarDate = new Date(selectedDate);
+                renderCalendar();
+                document.getElementById('calendar-modal').classList.remove('hidden');
+            });
+
+            document.getElementById('btn-close-calendar').addEventListener('click', () => {
+                document.getElementById('calendar-modal').classList.add('hidden');
+            });
+
+            document.getElementById('prev-month').addEventListener('click', () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+                renderCalendar();
+            });
+
+            document.getElementById('next-month').addEventListener('click', () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+                renderCalendar();
+            });
+
+            // Complete Day Button Handler
+            document.getElementById('btn-complete-day').addEventListener('click', () => {
+                triggerCompleteDay();
+            });
+
+            document.getElementById('btn-close-summary').addEventListener('click', () => {
+                document.getElementById('summary-modal').classList.add('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
